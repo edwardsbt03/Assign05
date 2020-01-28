@@ -33,6 +33,8 @@ public class HerdManager {
     /**
      * Constructor initializes the fields.
      */
+
+
     public HerdManager(OutputInterface out,
                        Gate westGate,
                        Gate eastGate) {
@@ -45,7 +47,42 @@ public class HerdManager {
         mEastGate.open(Gate.OUT);
     }
 
+
+    public static final int HERD = 24;
     // TODO -- Fill your code in here
+    public void simulateHerd(Random rand) {
+        int pen = HERD;
+        mOut.println("There are currently "+pen+" snails in the pen and "+(24-pen)+" snails in the pasture");
 
-
+        // If one side has 0 the movement isn't random
+        // according to the really poorly worded requirements
+        for (int i = 0; i < MAX_ITERATIONS; i++) {
+            if (pen == HERD) {
+                int move = rand.nextInt(pen);
+                move++;
+                pen -= move;  // use East Gate
+            } else if (pen == 0) {
+                int move = rand.nextInt(HERD);
+                move++;
+                pen += move; // use West Gate
+            } else {
+                // Randomly choose a gate based on the passed in rand object
+                int gateToUse = rand.nextInt(2);
+                if (gateToUse == 0) {
+                    // If it's 0 use east gate
+                    int move = rand.nextInt(24-pen);
+                    // Base 1
+                    move++;
+                    pen += move; // use West Gate
+                } else {
+                    // otherwise use west gate
+                    int move = rand.nextInt(pen);
+                    // Base 1
+                    move++;
+                    pen -= move; // use east Gate
+                }
+            }
+            mOut.println("There are currently " + pen + " snails in the pen and " + (24-pen) + " snails in the pasture");
+        }
+    }
 }
